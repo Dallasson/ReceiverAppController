@@ -6,25 +6,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:layout_gravity="center"
+    android:gravity="center|top"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/receiverEditTextBtn"
-        android:layout_width="wrap_content"
+    <!-- Input field for manual JSON message -->
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Receiver Edit Text"/>
+        android:layout_margin="24dp"
+        android:hint="Type your message"
+        android:inputType="text"
+        android:padding="14dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/receiverJsonFileBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Receiver Json File"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:text="RECEIVER SIDE"/>
+    <!-- Pick File Button -->
     <Button
-        android:id="@+id/receiverJsonApiBtn"
+        android:id="@+id/pickFileBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Receiver Json API"/>
+        android:backgroundTint="#FF9800"
+        android:text="Pick JSON File"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/messageInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Show selected file name -->
+    <Button
+        android:id="@+id/apiCallBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Api Json"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/pickFileBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Send button -->
+    <Button
+        android:id="@+id/sendJsonBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#3D5AFE"
+        android:text="Send"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/apiCallBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:id="@+id/receivedResponseTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text=""/>
 
 </LinearLayout>

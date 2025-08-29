@@ -1,25 +1,35 @@
 package com.app.receiverappcontroller
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.app.ipc_library.ApiController
 import com.app.ipc_library.IpcApiController
+import com.app.ipc_library.MessageStore
 import com.app.receiverappcontroller.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var apiController: ApiController
-
     private lateinit var binding: ActivityMainBinding
+
+    @SuppressLint("SetTextI18n")
+    private val pickFileLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri?.let { apiController.sendJsonFile(it) }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-
-        // Setup ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -31,31 +41,31 @@ class MainActivity : AppCompatActivity() {
 
         apiController = IpcApiController(
             context = this,
-            targetPackage = "com.app.ipcreceiver",
-            serviceClassName = "com.app.ipcreceiver.IControlService"
+            targetPackage = "com.app.senderappcontroller",
+            fileProviderPackage = "com.app.receiverappcontroller",
+            serviceClassName = "com.app.ipc_library.IpcService"
         )
 
-        binding.receiverEditTextBtn.setOnClickListener {
-            apiController.enableEditText(
-                shouldSendEditText = false
-            )
+
+        binding.sendJsonBtn.setOnClickListener {
+            val messageInput = binding.messageInput.text.toString()
+            if (messageInput.isEmpty()) {
+                Toast.makeText(this, "Please type something", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            apiController.sendEditText(messageInput)
         }
 
-        binding.receiverJsonFileBtn.setOnClickListener {
-            apiController.enableJsonFile(
-                shouldSendJsonFile = false
-            )
+        binding.pickFileBtn.setOnClickListener {
+            pickFileLauncher.launch(arrayOf("application/json"))
         }
 
-        binding.receiverJsonApiBtn.setOnClickListener {
-            apiController.enableJsonApi(
-                shouldSendJsonApi = false
-            )
+        binding.apiCallBtn.setOnClickListener {
+            apiController.sendJsonApi()
         }
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-       // apiController.unbindService() // Add this method inside your IpcApiController
+        MessageStore.messageLiveData.observe(this) { message ->
+            binding.receivedResponseTxt.text = message
+        }
     }
 }
